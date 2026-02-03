@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Data Warehouse - Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+        
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .metric-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-change {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-healthy {
+            background-color: #4CAF50;
+        }
+        
+        .status-unhealthy {
+            background-color: #f44336;
+        }
+        
+        .status-warning {
+            background-color: #ff9800;
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .chart-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .system-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        
+        .refresh-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        
+        .refresh-button:hover {
+            background: #5a6fd8;
+        }
+        
+        .last-updated {
+            text-align: right;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>E-Commerce Data Warehouse</h1>
+        <div class="subtitle">Real-time Monitoring Dashboard</div>
+    </div>
+    
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="loading">Loading metrics...</div>
+        </div>
+        
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>Monthly Revenue Trend</h3>
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3>System Health</h3>
+                <div id="systemHealth">
+                    <div class="loading">Loading system health...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="system-status" id="systemStatus">
+            <div class="loading">Loading system status...</div>
+        </div>
+        
+        <div class="last-updated" id="lastUpdated"></div>
+    </div>
+
+    <script>
+        let revenueChart = null;
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+        
+        // Format number with commas
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-US').format(num);
+        }
+        
+        // Get status indicator HTML
+        function getStatusIndicator(status) {
+            const statusClass = status === 'healthy' ? 'status-healthy' : 
+                               status === 'unhealthy' ? 'status-unhealthy' : 'status-warning';
+            return `<span class="status-indicator ${statusClass}"></span>`;
+        }
+        
+        // Load business metrics
+        async function loadBusinessMetrics() {
+            try {
+                const response = await fetch('/api/business-metrics');
+                const data = await response.json();
+                
+                if (data.status === 'available') {
+                    const metricsHtml = `
+                        <div class="metric-card">
+                            <h3>Total Revenue</h3>
+                            <div class="metric-value">${formatCurrency(data.total_revenue)}</div>
+                            <div class="metric-change">All time</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Total Orders</h3>
+                            <div class="metric-value">${formatNumber(data.total_orders)}</div>
+                            <div class="metric-change">Delivered orders</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Total Customers</h3>
+                            <div class="metric-value">${formatNumber(data.total_customers)}</div>
+                            <div class="metric-change">Registered customers</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Average Order Value</h3>
+                            <div class="metric-value">${formatCurrency(data.avg_order_value)}</div>
+                            <div class="metric-change">Per order</div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('metricsGrid').innerHTML = metricsHtml;
+                    
+                    // Update revenue chart
+                    updateRevenueChart(data.monthly_trends);
+                } else {
+                    document.getElementById('metricsGrid').innerHTML = 
+                        '<div class="error">Failed to load business metrics</div>';
+                }
+            } catch (error) {
+                console.error('Error loading business metrics:', error);
+                document.getElementById('metricsGrid').innerHTML = 
+                    '<div class="error">Error loading business metrics</div>';
+            }
+        }
+        
+        // Update revenue chart
+        function updateRevenueChart(monthlyData) {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+            
+            const labels = monthlyData.map(item => item.month_name);
+            const revenues = monthlyData.map(item => item.revenue);
+            
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Monthly Revenue',
+                        data: revenues,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Load system health
+        async function loadSystemHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                const healthHtml = `
+                    <div class="status-card">
+                        <h4>${getStatusIndicator(data.overall_status)}Overall Status</h4>
+                        <p>${data.overall_status.toUpperCase()}</p>
+                    </div>
+                    <div class="status-card">
+                        <h4>${getStatusIndicator(data.database.status)}Database</h4>
+                        <p>${data.database.status.toUpperCase()}</p>
+                        ${data.database.database_size ? `<small>Size: ${data.database.database_size}</small>` : ''}
+                    </div>
+                    <div class="status-card">
+                        <h4>${getStatusIndicator(data.redis.status)}Redis Cache</h4>
+                        <p>${data.redis.status.toUpperCase()}</p>
+                        ${data.redis.hit_rate !== undefined ? `<small>Hit Rate: ${data.redis.hit_rate}%</small>` : ''}
+                    </div>
+                `;
+                
+                document.getElementById('systemHealth').innerHTML = healthHtml;
+            } catch (error) {
+                console.error('Error loading system health:', error);
+                document.getElementById('systemHealth').innerHTML = 
+                    '<div class="error">Error loading system health</div>';
+            }
+        }
+        
+        // Load system status
+        async function loadSystemStatus() {
+            try {
+                const response = await fetch('/api/system-stats');
+                const data = await response.json();
+                
+                let statusHtml = '';
+                
+                // ETL Status
+                if (data.etl && data.etl.status === 'available') {
+                    const etlStatus = data.etl.latest_run.status || 'unknown';
+                    statusHtml += `
+                        <div class="status-card">
+                            <h4>${getStatusIndicator(etlStatus === 'success' ? 'healthy' : 'unhealthy')}ETL Pipeline</h4>
+                            <p>Status: ${etlStatus.toUpperCase()}</p>
+                            <small>Total Runs: ${data.etl.total_runs}</small>
+                        </div>
+                    `;
+                }
+                
+                // Data Quality Status
+                if (data.data_quality && data.data_quality.status === 'available') {
+                    statusHtml += `
+                        <div class="status-card">
+                            <h4>${getStatusIndicator('healthy')}Data Quality</h4>
+                            <p>MONITORED</p>
+                            <small>Total Checks: ${data.data_quality.total_checks}</small>
+                        </div>
+                    `;
+                }
+                
+                // Database Tables
+                if (data.database && data.database.table_statistics) {
+                    const totalRecords = data.database.table_statistics.reduce((sum, table) => 
+                        sum + (table.live_tuples || 0), 0);
+                    statusHtml += `
+                        <div class="status-card">
+                            <h4>${getStatusIndicator('healthy')}Data Warehouse</h4>
+                            <p>ACTIVE</p>
+                            <small>Total Records: ${formatNumber(totalRecords)}</small>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('systemStatus').innerHTML = statusHtml || 
+                    '<div class="loading">No system status data available</div>';
+                    
+            } catch (error) {
+                console.error('Error loading system status:', error);
+                document.getElementById('systemStatus').innerHTML = 
+                    '<div class="error">Error loading system status</div>';
+            }
+        }
+        
+        // Load all data
+        async function loadDashboard() {
+            await Promise.all([
+                loadBusinessMetrics(),
+                loadSystemHealth(),
+                loadSystemStatus()
+            ]);
+            
+            document.getElementById('lastUpdated').textContent = 
+                `Last updated: ${new Date().toLocaleString()}`;
+        }
+        
+        // Auto-refresh every 30 seconds
+        function startAutoRefresh() {
+            setInterval(loadDashboard, 30000);
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            startAutoRefresh();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+customer_id,first_name,last_name,email,phone,address,city,state,zip_code,country,registration_date,customer_segment,preferred_contact
+1,John,Smith,john.smith@email.com,555-0101,123 Main St,New York,NY,10001,USA,2023-01-15,Premium,email
+2,Sarah,Johnson,sarah.j@email.com,555-0102,456 Oak Ave,Los Angeles,CA,90210,USA,2023-01-20,Standard,phone
+3,Mike,Brown,mike.brown@email.com,555-0103,789 Pine St,Chicago,IL,60601,USA,2023-02-01,Premium,email
+4,Emily,Davis,emily.davis@email.com,555-0104,321 Elm St,Houston,TX,77001,USA,2023-02-15,Standard,email
+5,David,Wilson,david.w@email.com,555-0105,654 Maple Dr,Phoenix,AZ,85001,USA,2023-03-01,Premium,phone
+6,Lisa,Garcia,lisa.garcia@email.com,555-0106,987 Cedar Ln,Philadelphia,PA,19101,USA,2023-03-10,Standard,email
+7,James,Martinez,james.m@email.com,555-0107,147 Birch St,San Antonio,TX,78201,USA,2023-03-15,Premium,email
+8,Maria,Rodriguez,maria.r@email.com,555-0108,258 Spruce Ave,San Diego,CA,92101,USA,2023-04-01,Standard,phone
+9,Robert,Lee,robert.lee@email.com,555-0109,369 Willow St,Dallas,TX,75201,USA,2023-04-10,Premium,email
+10,Jennifer,Taylor,jen.taylor@email.com,555-0110,741 Ash Dr,San Jose,CA,95101,USA,2023-04-20,Standard,email
+11,Michael,Anderson,m.anderson@email.com,555-0111,852 Oak St,Seattle,WA,98101,USA,2023-05-01,Premium,phone
+12,Jessica,Thomas,j.thomas@email.com,555-0112,963 Pine Ave,Denver,CO,80201,USA,2023-05-05,Standard,email
+13,Christopher,Jackson,c.jackson@email.com,555-0113,147 Elm Dr,Boston,MA,02101,USA,2023-05-10,Premium,email
+14,Amanda,White,a.white@email.com,555-0114,258 Maple St,Atlanta,GA,30301,USA,2023-05-15,Standard,phone
+15,Daniel,Harris,d.harris@email.com,555-0115,369 Cedar Ave,Miami,FL,33101,USA,2023-05-20,Premium,email
+16,Ashley,Martin,a.martin@email.com,555-0116,741 Birch Dr,Portland,OR,97201,USA,2023-06-01,Standard,email
+17,Matthew,Thompson,m.thompson@email.com,555-0117,852 Spruce St,Las Vegas,NV,89101,USA,2023-06-05,Premium,phone
+18,Stephanie,Garcia,s.garcia@email.com,555-0118,963 Willow Ave,Nashville,TN,37201,USA,2023-06-10,Standard,email
+19,Joshua,Martinez,j.martinez@email.com,555-0119,147 Ash St,Austin,TX,78701,USA,2023-06-15,Premium,email
+20,Michelle,Robinson,m.robinson@email.com,555-0120,258 Oak Dr,Charlotte,NC,28201,USA,2023-06-20,Standard,phone
+21,Andrew,Clark,a.clark@email.com,555-0121,369 Pine St,Indianapolis,IN,46201,USA,2023-07-01,Premium,email
+22,Melissa,Rodriguez,m.rodriguez@email.com,555-0122,741 Elm Ave,Columbus,OH,43201,USA,2023-07-05,Standard,email
+23,Kevin,Lewis,k.lewis@email.com,555-0123,852 Maple Dr,San Francisco,CA,94101,USA,2023-07-10,Premium,phone
+24,Laura,Lee,l.lee@email.com,555-0124,963 Cedar St,Detroit,MI,48201,USA,2023-07-15,Standard,email
+25,Brian,Walker,b.walker@email.com,555-0125,147 Birch Ave,Memphis,TN,38101,USA,2023-07-20,Premium,email

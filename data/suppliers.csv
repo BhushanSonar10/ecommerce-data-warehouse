@@ -1,0 +1,19 @@
+supplier_id,supplier_name,contact_person,email,phone,address,city,state,country,supplier_type,rating,contract_start,contract_end
+101,Apple Inc,Tim Cook,procurement@apple.com,408-996-1010,1 Apple Park Way,Cupertino,CA,USA,Direct,5.0,2023-01-01,2025-12-31
+102,Samsung Electronics,Jong-Hee Han,supply@samsung.com,82-2-2255-0114,129 Samsung-ro,Seoul,,South Korea,Direct,4.8,2023-01-01,2024-12-31
+103,Dell Technologies,Michael Dell,partners@dell.com,512-338-4400,1 Dell Way,Round Rock,TX,USA,Direct,4.5,2023-01-01,2024-06-30
+104,Sony Corporation,Kenichiro Yoshida,business@sony.com,81-3-6748-2111,1-7-1 Konan,Tokyo,,Japan,Direct,4.7,2023-01-01,2025-12-31
+105,Amazon,Andy Jassy,vendor@amazon.com,206-266-1000,410 Terry Ave N,Seattle,WA,USA,Marketplace,4.2,2023-01-01,2024-12-31
+106,Microsoft Corporation,Satya Nadella,procurement@microsoft.com,425-882-8080,1 Microsoft Way,Redmond,WA,USA,Direct,4.9,2023-01-01,2025-12-31
+107,Canon Inc,Fujio Mitarai,sales@canon.com,81-3-3758-2111,30-2 Shimomaruko,Tokyo,,Japan,Direct,4.6,2023-01-01,2024-12-31
+108,GoPro Inc,Nicholas Woodman,partners@gopro.com,650-332-7600,3025 Clearview Way,San Mateo,CA,USA,Direct,4.3,2023-01-01,2024-06-30
+109,Fitbit Inc,James Park,business@fitbit.com,415-513-1000,199 Fremont St,San Francisco,CA,USA,Direct,4.4,2023-01-01,2024-12-31
+110,Bose Corporation,Lila Snyder,procurement@bose.com,508-879-7330,100 The Mountain Rd,Framingham,MA,USA,Direct,4.8,2023-01-01,2025-12-31
+111,Nintendo Co Ltd,Shuntaro Furukawa,business@nintendo.com,81-75-662-9600,11-1 Hokotate-cho,Kyoto,,Japan,Direct,4.9,2023-01-01,2025-12-31
+201,Nike Inc,John Donahoe,suppliers@nike.com,503-671-6453,1 Bowerman Dr,Beaverton,OR,USA,Direct,4.7,2023-01-01,2024-12-31
+202,Adidas AG,Bjørn Gulden,procurement@adidas.com,49-9132-84-0,Adi-Dassler-Strasse 1,Herzogenaurach,,Germany,Direct,4.6,2023-01-01,2024-12-31
+203,Levi Strauss Co,Chip Bergh,vendors@levi.com,415-501-6000,1155 Battery St,San Francisco,CA,USA,Direct,4.4,2023-01-01,2024-06-30
+204,VF Corporation,Bracken Darrell,supply@vf.com,336-424-6000,8505 E Orchard Rd,Greenwood Village,CO,USA,Distributor,4.3,2023-01-01,2024-12-31
+205,Patagonia Inc,Ryan Gellert,business@patagonia.com,805-643-8616,259 W Santa Clara St,Ventura,CA,USA,Direct,4.8,2023-01-01,2025-12-31
+206,Under Armour Inc,Kevin Plank,procurement@underarmour.com,410-454-6428,1020 Hull St,Baltimore,MD,USA,Direct,4.2,2023-01-01,2024-12-31
+301,Luxottica Group,Francesco Milleri,suppliers@luxottica.com,39-02-8633-4000,Via Cantù 2,Milan,,Italy,Distributor,4.5,2023-01-01,2024-12-31

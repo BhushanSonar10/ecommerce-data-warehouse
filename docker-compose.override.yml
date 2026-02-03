@@ -1,0 +1,75 @@
+# Docker Compose Override for Development
+# This file provides development-specific configurations
+# It automatically merges with docker-compose.yml when running docker-compose commands
+
+version: '3.8'
+
+services:
+  postgres:
+    # Development-specific PostgreSQL settings
+    environment:
+      - POSTGRES_DB=ecommerce_dw_dev
+    volumes:
+      # Mount local data directory for development
+      - ./dev-data:/var/lib/postgresql/dev-data
+    ports:
+      # Expose on different port to avoid conflicts
+      - "5433:5432"
+
+  redis:
+    # Development Redis settings
+    command: redis-server --appendonly yes --maxmemory 256mb
+    volumes:
+      - ./dev-redis-data:/data
+
+  etl:
+    # Development ETL settings
+    environment:
+      - DB_NAME=ecommerce_dw_dev
+      - DB_PORT=5432
+      - LOG_LEVEL=DEBUG
+      - DEVELOPMENT_MODE=true
+    volumes:
+      # Mount source code for live development
+      - ./etl:/app/etl:ro
+      - ./data:/app/data:ro
+      - ./sql:/app/sql:ro
+    # Override command for development
+    command: python -u main.py
+
+  airflow-webserver:
+    # Development Airflow webserver
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=true
+      - AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE=true
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=false
+    volumes:
+      # Mount DAGs for live development
+      - ./airflow/dags:/opt/airflow/dags:rw
+      - ./dev-airflow-logs:/opt/airflow/logs
+
+  airflow-scheduler:
+    # Development Airflow scheduler
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=true
+    volumes:
+      # Mount DAGs for live development
+      - ./airflow/dags:/opt/airflow/dags:rw
+      - ./dev-airflow-logs:/opt/airflow/logs
+
+  monitoring:
+    # Development monitoring settings
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=true
+    volumes:
+      # Mount source code for live development
+      - ./monitoring:/app:rw
+    # Override command for development with auto-reload
+    command: python -u app.py
+
+# Development-specific volumes
+volumes:
+  dev-postgres-data:
+  dev-redis-data:
+  dev-airflow-logs:
