@@ -102,43 +102,6 @@ docker-compose up --build
 | **Monitoring** | Flask + Chart.js | Real-time dashboards |
 | **Containerization** | Docker + Compose | Multi-service deployment |
 
-## 📈 Business Analytics
-
-### Revenue Analysis
-```sql
--- Monthly revenue trends with growth rates
-SELECT 
-    dd.month_name,
-    SUM(fs.total_price + fs.shipping_cost + fs.tax_amount) as revenue,
-    LAG(SUM(fs.total_price + fs.shipping_cost + fs.tax_amount)) 
-        OVER (ORDER BY dd.year, dd.month) as prev_month_revenue
-FROM fact_sales fs
-JOIN dim_dates dd ON fs.order_date_key = dd.date_key
-GROUP BY dd.year, dd.month, dd.month_name
-ORDER BY dd.year, dd.month;
-```
-
-### Customer Segmentation
-```sql
--- Customer lifetime value analysis
-SELECT 
-    dc.customer_segment,
-    COUNT(*) as customer_count,
-    AVG(total_spent) as avg_lifetime_value,
-    AVG(order_count) as avg_orders_per_customer
-FROM (
-    SELECT 
-        dc.customer_id,
-        dc.customer_segment,
-        COUNT(DISTINCT fs.order_id) as order_count,
-        SUM(fs.total_price + fs.shipping_cost + fs.tax_amount) as total_spent
-    FROM fact_sales fs
-    JOIN dim_customers dc ON fs.customer_key = dc.customer_key
-    GROUP BY dc.customer_id, dc.customer_segment
-) customer_metrics
-JOIN dim_customers dc ON customer_metrics.customer_id = dc.customer_id
-GROUP BY dc.customer_segment;
-```
 ## 🛡️ Production Features
 
 ### Advanced Error Handling
@@ -236,46 +199,6 @@ This project demonstrates mastery in:
 - KPI tracking and business metrics
 - Data visualization and reporting
 
-## 💼 Resume Impact
 
-**For Senior Data Engineer Positions:**
-
-• **Architected enterprise-grade data warehouse** using Python ETL pipeline, PostgreSQL, Apache Airflow, and Redis caching, processing 80+ e-commerce transactions with comprehensive error handling and automated recovery mechanisms
-
-• **Implemented advanced data orchestration** with Apache Airflow DAGs, featuring dependency management, automated retries, and real-time monitoring, achieving 99.9% pipeline reliability and sub-minute failure recovery
-
-• **Built production monitoring system** with Flask-based dashboard, Redis caching layer, and real-time business metrics visualization, enabling proactive system health management and performance optimization
-
-• **Designed complex star schema** with 6 interconnected tables, implementing advanced data quality checks, foreign key constraints, and automated validation frameworks, ensuring 100% data integrity across multi-source ingestion
-## 🔮 Future Enhancements
-
-- **Streaming Data**: Apache Kafka integration for real-time processing
-- **Machine Learning**: Predictive analytics and customer segmentation
-- **Data Governance**: Automated data lineage and catalog management
-- **Cloud Migration**: AWS/GCP deployment with managed services
-- **Advanced Analytics**: Time series forecasting and anomaly detection
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Apache Airflow** community for excellent orchestration tools
-- **PostgreSQL** team for robust database technology
-- **Redis** community for high-performance caching solutions
-- **Docker** for containerization excellence
-
----
-
-**Built with ❤️ for demonstrating enterprise data engineering skills**
 
 > This project represents production-ready code suitable for enterprise environments. Every component has been designed with scalability, reliability, and maintainability in mind.
